@@ -1,107 +1,147 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <title>Регистрация</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--tg-theme-bg-color, #f0f4ff);
-            color: var(--tg-theme-text-color, #000000);
-            transition: all 0.3s ease;
-        }
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .step {
-            display: none;
-        }
-        .step.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        button {
-            background-color: var(--tg-theme-button-color, #6a5acd);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-            width: 100%;
-        }
-        .error {
-            border-color: #ff4444 !important;
-            animation: shake 0.5s;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Регистрация</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--tg-theme-bg-color, #f0f4ff);
+      color: var(--tg-theme-text-color, #000);
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: var(--tg-theme-button-color, #6a5acd);
+      color: var(--tg-theme-button-text-color, #fff);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px 0;
+      width: 100%;
+    }
+
+    .checkbox-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .error {
+      border-color: #ff4c4c;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    #statusMessage {
+      margin-top: 15px;
+      text-align: center;
+      color: #6a5acd;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Шаг 1 -->
-        <div id="step1" class="step active">
-            <h2>Личные данные</h2>
-            <input type="text" id="firstName" placeholder="Имя" required>
-            <input type="text" id="lastName" placeholder="Фамилия" required>
-            <button onclick="nextStep()">Далее</button>
-        </div>
-
-        <!-- Шаг 2 -->
-        <div id="step2" class="step">
-            <h2>Демография</h2>
-            <select id="gender" required>
-                <option value="">Выберите пол</option>
-                <option value="male">Мужской</option>
-                <option value="female">Женский</option>
-            </select>
-            <input type="number" id="age" placeholder="Возраст" min="18" max="100" required>
-            <div style="display: flex;">
-                <button onclick="prevStep()" style="background: #888;">Назад</button>
-                <button onclick="nextStep()">Далее</button>
-            </div>
-        </div>
-
-        <!-- Шаг 3 -->
-        <div id="step3" class="step">
-            <h2>Профессиональная информация</h2>
-            <input type="text" id="sphere" placeholder="Сфера деятельности" required>
-            <textarea id="interests" placeholder="Ваши интересы" rows="3" required></textarea>
-            <div style="display: flex;">
-                <button onclick="prevStep()" style="background: #888;">Назад</button>
-                <button onclick="submitForm()" id="submitBtn">Завершить регистрацию</button>
-            </div>
-        </div>
-
-        <div id="statusMessage" style="display: none; padding: 15px; text-align: center;"></div>
+  <div class="container">
+    <!-- STEP 1 -->
+    <div id="step1" class="step active">
+      <h2>Ваши данные</h2>
+      <input type="text" id="firstName" placeholder="Имя" required />
+      <input type="text" id="lastName" placeholder="Фамилия" required />
+      <button onclick="nextStep()">Далее</button>
     </div>
 
-    <script src="app.js?v=1"></script>
+    <!-- STEP 2 -->
+    <div id="step2" class="step">
+      <h2>Пол и возраст</h2>
+      <select id="gender" required>
+        <option value="">Выберите пол</option>
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+        <option value="other">Предпочитаю не указывать</option>
+      </select>
+      <input type="number" id="age" placeholder="Возраст" min="18" max="100" required />
+      <div class="nav-buttons">
+        <button onclick="prevStep()" style="background:#888;">Назад</button>
+        <button onclick="nextStep()">Далее</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="step">
+      <h2>Чем занимаетесь?</h2>
+      <select id="sphere" required>
+        <option value="">Выберите сферу</option>
+        <option value="IT">IT и Разработка</option>
+        <option value="Финансы">Финансы</option>
+        <option value="Маркетинг">Маркетинг</option>
+        <option value="Образование">Образование</option>
+        <option value="Продажи">Продажи</option>
+        <option value="Юриспруденция">Юриспруденция</option>
+        <option value="Другое">Другое</option>
+      </select>
+
+      <h3>Ваши интересы</h3>
+      <div class="checkbox-group" id="interestsGroup">
+        <label><input type="checkbox" name="interests" value="Стартапы" />Стартапы</label>
+        <label><input type="checkbox" name="interests" value="Инвестиции" />Инвестиции</label>
+        <label><input type="checkbox" name="interests" value="Технологии" />Технологии</label>
+        <label><input type="checkbox" name="interests" value="Нетворкинг" />Нетворкинг</label>
+        <label><input type="checkbox" name="interests" value="Маркетинг" />Маркетинг</label>
+        <label><input type="checkbox" name="interests" value="Лидерство" />Лидерство</label>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevStep()" style="background:#888;">Назад</button>
+        <button onclick="submitForm()" id="submitBtn">Завершить</button>
+      </div>
+    </div>
+
+    <!-- Статус -->
+    <div id="statusMessage">...</div>
+  </div>
+
+  <script src="app.js?v=2"></script>
 </body>
 </html>
