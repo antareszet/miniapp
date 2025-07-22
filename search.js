@@ -1,5 +1,5 @@
 // URL вашего бэкенд-API
-const API_URL = "http://localhost:8000/api/search
+const API_URL = "https://YOUR_BACKEND/api/search
 ";  // Замените на свой
 
 document.addEventListener('DOMContentLoaded', () => {
