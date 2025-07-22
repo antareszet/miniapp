@@ -1,87 +1,93 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="format-detection" content="telephone=no" />
-  <title>Регистрация</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--tg-theme-bg-color, #f0f4ff);
-      color: var(--tg-theme-text-color, #000);
-    }
-
-    .container {
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .step {
-      display: none;
-    }
-
-    .step.active {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: var(--tg-theme-button-color, #6a5acd);
-      color: var(--tg-theme-button-text-color, #fff);
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px 0;
-      width: 100%;
-    }
-
-    .checkbox-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .error {
-      border-color: #ff4c4c;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    #statusMessage {
-      margin-top: 15px;
-      text-align: center;
-      color: #6a5acd;
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--tg-theme-bg-color, #f0f4ff);
+            color: var(--tg-theme-text-color, #000);
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: var(--tg-theme-button-color, #6a5acd);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        .error {
+            border-color: #ff4c4c;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        #statusMessage {
+            margin-top: 15px;
+            text-align: center;
+            color: #6a5acd;
+            display: none;
+        }
+        .tags-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .tag-btn {
+            padding: 9px 18px;
+            border-radius: 20px;
+            border: 1.5px solid #6a5acd;
+            background: #edeaff;
+            color: #4a4a8e;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background .18s, color .18s, border-color .18s;
+            outline: none;
+            margin: 2px 0;
+        }
+        .tag-btn.selected {
+            background: #6a5acd;
+            color: #fff;
+            border-color: #483d8b;
+        }
+    </style>
 </head>
-
 <body>
   <div class="container">
     <!-- STEP 1 -->
@@ -111,46 +117,59 @@
     <!-- STEP 3 -->
     <div id="step3" class="step">
       <h2>Чем занимаетесь?</h2>
-        <select id="sphere" required>
-          <option value="">Выберите сферу</option>
-          <option value="IT">IT и Разработка</option>
-          <option value="Финансы">Финансы</option>
-          <option value="Маркетинг">Маркетинг</option>
-          <option value="Образование">Образование</option>
-          <option value="Продажи">Продажи</option>
-          <option value="Юриспруденция">Юриспруденция</option>
-          <option value="Медицина">Медицина и здравоохранение</option>
-          <option value="Дизайн">Дизайн и креативные индустрии</option>
-          <option value="Медиа">Медиа и журналистика</option>
-          <option value="Наука">Наука и исследования</option>
-          <option value="Инженерия">Инженерия и промышленность</option>
-          <option value="Строительство">Строительство и недвижимость</option>
-          <option value="Логистика">Логистика и транспорт</option>
-          <option value="HoReCa">HoReCa, туризм и гостиницы</option>
-          <option value="Ритейл">Ритейл и торговля</option>
-          <option value="HR">Управление персоналом / HR</option>
-          <option value="Администрация">Администрирование и управление</option>
-          <option value="Госслужба">Государственная служба и НКО</option>
-          <option value="Аналитика">Аналитика и консалтинг</option>
-          <option value="Безопасность">Безопасность и охрана</option>
-          <option value="Культура">Искусство и культура</option>
-          <option value="Спорт">Спорт и фитнес</option>
-          <option value="Инфраструктура">Энергетика и инфраструктура</option>
-          <option value="Сельское хозяйство">Сельское хозяйство и агро</option>
-          <option value="Экология">Экология и устойчивое развитие</option>
-          <option value="Блогинг">Блогинг и SMM</option>
-          <option value="Другое">Другое</option>
-        </select>
-
+      <select id="sphere" required>
+        <option value="">Выберите сферу</option>
+        <option value="IT">IT и Разработка</option>
+        <option value="Финансы">Финансы</option>
+        <option value="Маркетинг">Маркетинг</option>
+        <option value="Образование">Образование</option>
+        <option value="Продажи">Продажи</option>
+        <option value="Юриспруденция">Юриспруденция</option>
+        <option value="Медицина">Медицина и здравоохранение</option>
+        <option value="Дизайн">Дизайн</option>
+        <option value="Медиа">Медиа/Журналистика</option>
+        <option value="Наука">Наука/Исследования</option>
+        <option value="Инженерия">Инженерия/Производство</option>
+        <option value="Строительство">Строительство</option>
+        <option value="Логистика">Логистика/Транспорт</option>
+        <option value="HoReCa">HoReCa, туризм, гостиницы</option>
+        <option value="Ритейл">Торговля/Ритейл</option>
+        <option value="HR">Управление персоналом/HR</option>
+        <option value="Администрация">Администрирование</option>
+        <option value="Госслужба">Госслужба/НКО</option>
+        <option value="Аналитика">Аналитика/Консалтинг</option>
+        <option value="Безопасность">Безопасность/Охрана</option>
+        <option value="Культура">Искусство/Культура</option>
+        <option value="Спорт">Спорт/Фитнес</option>
+        <option value="Инфраструктура">Энергетика/Инфраструктура</option>
+        <option value="Агро">Сельское хозяйство</option>
+        <option value="Экология">Экология/Устойчивое развитие</option>
+        <option value="Блогинг">Блогинг/SMM</option>
+        <option value="Другое">Другое</option>
+      </select>
 
       <h3>Ваши интересы</h3>
-      <div class="checkbox-group" id="interestsGroup">
-        <label><input type="checkbox" name="interests" value="Стартапы" />Стартапы</label>
-        <label><input type="checkbox" name="interests" value="Инвестиции" />Инвестиции</label>
-        <label><input type="checkbox" name="interests" value="Технологии" />Технологии</label>
-        <label><input type="checkbox" name="interests" value="Нетворкинг" />Нетворкинг</label>
-        <label><input type="checkbox" name="interests" value="Маркетинг" />Маркетинг</label>
-        <label><input type="checkbox" name="interests" value="Лидерство" />Лидерство</label>
+      <div class="tags-group" id="interestsGroup">
+        <button type="button" class="tag-btn" data-value="Стартапы">Стартапы</button>
+        <button type="button" class="tag-btn" data-value="Инвестиции">Инвестиции</button>
+        <button type="button" class="tag-btn" data-value="Разработка">Разработка</button>
+        <button type="button" class="tag-btn" data-value="Маркетинг">Маркетинг</button>
+        <button type="button" class="tag-btn" data-value="Нетворкинг">Нетворкинг</button>
+        <button type="button" class="tag-btn" data-value="Наука">Наука</button>
+        <button type="button" class="tag-btn" data-value="Искусство">Искусство</button>
+        <button type="button" class="tag-btn" data-value="Финансы">Финансы</button>
+        <button type="button" class="tag-btn" data-value="Лидерство">Лидерство</button>
+        <button type="button" class="tag-btn" data-value="Дизайн">Дизайн</button>
+        <button type="button" class="tag-btn" data-value="Медиа">Медиа</button>
+        <button type="button" class="tag-btn" data-value="Образование">Образование</button>
+        <button type="button" class="tag-btn" data-value="Менеджмент">Менеджмент</button>
+        <button type="button" class="tag-btn" data-value="HR">HR</button>
+        <button type="button" class="tag-btn" data-value="Путешествия">Путешествия</button>
+        <button type="button" class="tag-btn" data-value="Фитнес">Фитнес</button>
+        <button type="button" class="tag-btn" data-value="Спорт">Спорт</button>
+        <button type="button" class="tag-btn" data-value="Экология">Экология</button>
+        <button type="button" class="tag-btn" data-value="Креатив">Креатив</button>
+        <button type="button" class="tag-btn" data-value="Другое">Другое</button>
       </div>
 
       <div class="nav-buttons">
@@ -160,9 +179,8 @@
     </div>
 
     <!-- Статус -->
-    <div id="statusMessage">...</div>
+    <div id="statusMessage"></div>
   </div>
-
-  <script src="app.js?v=2"></script>
+  <script src="app.js?v=tag"></script>
 </body>
 </html>
