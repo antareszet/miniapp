@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
     <title>Регистрация</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -97,7 +99,6 @@
 </head>
 <body>
     <div class="container">
-
         <!-- Стартовый экран -->
         <div id="startScreen">
             <h2>Добро пожаловать!</h2>
@@ -138,14 +139,11 @@
 
         <!-- Кнопки навигации -->
         <div class="buttons">
-            <button id="prevBtn" onclick="prevStep()" style="display: none;">Назад</button>
-            <button id="nextBtn" onclick="nextStep()" style="display: none;">Далее</button>
+            <button id="prevBtn" style="display: none;">Назад</button>
+            <button id="nextBtn" style="display: none;">Далее</button>
         </div>
     </div>
 
-    
     <script src="app.js"></script>
-
-
 </body>
 </html>
