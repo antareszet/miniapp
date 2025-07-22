@@ -13,15 +13,45 @@ document.addEventListener('DOMContentLoaded', () => {
   tgWebApp.ready();
   tgWebApp.expand();
 
-  // Стилизация выбранных тегов интересов
   document.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
       this.classList.toggle('selected');
     });
   });
 
+  // Автозаполнение для редактирования профиля
+  const tgid = tgWebApp.initDataUnsafe?.user?.id;
+  const urlParams = new URLSearchParams(window.location.search);
+  const editing = urlParams.get("mode") === "edit";
+  if (editing && tgid) {
+    fetch(`https://ТВОЙ-ДОМЕН/api/profile/${tgid}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.result !== "ok") return;
+
+        document.getElementById('firstName').value = data.firstName;
+        document.getElementById('lastName').value = data.lastName;
+        document.getElementById('gender').value = data.gender;
+        document.getElementById('age').value = data.age;
+        document.getElementById('sphere').value = data.sphere;
+
+        // выделение выбранных тегов
+        (data.interests || []).forEach(interest => {
+          document.querySelectorAll('.tag-btn').forEach(btn => {
+            if (btn.dataset.value === interest) btn.classList.add("selected");
+          });
+        });
+
+        console.log("✅ Профиль загружен и установлен в поля формы");
+      })
+      .catch(err => {
+        console.error("Не удалось загрузить профиль:", err);
+      });
+  }
+
   showStep(currentStep);
 });
+
 
 function showStep(step) {
   document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
