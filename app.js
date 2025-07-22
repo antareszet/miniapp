@@ -6,13 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
   tgWebApp = window.Telegram?.WebApp;
 
   if (!tgWebApp) {
-    alert("❌ Откройте страницу через Telegram-бота");
+    alert("❌ Откройте форму через Telegram-бота.");
     return;
   }
 
-  console.log("✅ Telegram WebApp готов");
   tgWebApp.ready();
   tgWebApp.expand();
+
+  // Стилизация выбранных тегов интересов
+  document.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('selected');
+    });
+  });
 
   showStep(currentStep);
 });
@@ -37,9 +43,8 @@ function prevStep() {
   }
 }
 
-function getCheckedInterests() {
-  return Array.from(document.querySelectorAll('input[name="interests"]:checked'))
-    .map(cb => cb.value);
+function getSelectedInterests() {
+  return Array.from(document.querySelectorAll('.tag-btn.selected')).map(btn => btn.dataset.value);
 }
 
 function validateStep(step) {
@@ -55,8 +60,21 @@ function validateStep(step) {
     } else {
       input.classList.remove('error');
     }
+    // Для возраста
+    if (input.id === 'age' && input.value) {
+      const age = parseInt(input.value);
+      if (age < 18 || age > 100) {
+        input.classList.add('error');
+        valid = false;
+      }
+    }
   });
 
+  // На последнем шаге просим выбрать хотя бы 1 интерес
+  if (step === 3 && getSelectedInterests().length === 0) {
+    showError('Выберите хотя бы один интерес');
+    valid = false;
+  }
   return valid;
 }
 
@@ -69,7 +87,7 @@ function submitForm() {
     gender: document.getElementById('gender').value,
     age: parseInt(document.getElementById('age').value),
     sphere: document.getElementById('sphere').value,
-    interests: getCheckedInterests()
+    interests: getSelectedInterests()
   };
 
   console.log("📦 Отправляем данные:", data);
@@ -77,13 +95,14 @@ function submitForm() {
   try {
     tgWebApp.sendData(JSON.stringify(data));
     showSuccess("✅ Данные отправлены!");
-    setTimeout(() => tgWebApp.close(), 1500);
+    setTimeout(() => tgWebApp.close(), 1200);
   } catch (e) {
     showError("⚠️ Ошибка отправки данных");
     console.error(e);
   }
 }
 
+// Вспомогательные функции для statуs
 function showError(msg) {
   const el = document.getElementById('statusMessage');
   el.style.display = 'block';
