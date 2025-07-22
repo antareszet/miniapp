@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #f0f4ff, #d9e2ff);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            animation: fadeIn 1s ease-in;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #4a4a8e;
+        }
+        .progress-bar {
+            height: 5px;
+            background: #ddd;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #6a5acd;
+            transition: width 0.3s ease;
+        }
+        .step {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .step.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideIn 0.5s forwards;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #6a5acd;
+            outline: none;
+        }
+        button {
+            background: #6a5acd;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #483d8b;
+            transform: scale(1.05);
+        }
+        .error {
+            border-color: red !important;
+            animation: shake 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-50%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Стартовый экран -->
+        <div id="startScreen">
+            <h2>Добро пожаловать!</h2>
+            <p>Это мини-приложение для поиска бизнес-партнёров, инвесторов и единомышленников.</p>
+            <button id="startBtn">Начать регистрацию</button>
+        </div>
+
+        <!-- Прогресс-бар -->
+        <div class="progress-bar">
+            <div class="progress" id="progress" style="width: 0%;"></div>
+        </div>
+
+        <!-- Шаг 1 -->
+        <div id="step1" class="step">
+            <h2>Шаг 1: Личные данные</h2>
+            <input type="text" id="firstName" placeholder="Имя">
+            <input type="text" id="lastName" placeholder="Фамилия">
+        </div>
+
+        <!-- Шаг 2 -->
+        <div id="step2" class="step">
+            <h2>Шаг 2: Пол и возраст</h2>
+            <select id="gender">
+                <option value="">Выберите пол</option>
+                <option value="male">Мужской</option>
+                <option value="female">Женский</option>
+                <option value="other">Другой</option>
+            </select>
+            <input type="number" id="age" placeholder="Возраст" min="18" max="100">
+        </div>
+
+        <!-- Шаг 3 -->
+        <div id="step3" class="step">
+            <h2>Шаг 3: Сфера и интересы</h2>
+            <input type="text" id="sphere" placeholder="Сфера деятельности (IT, Finance)">
+            <textarea id="interests" placeholder="Интересы (бизнес, личные...)" rows="4"></textarea>
+        </div>
+
+        <!-- Кнопки навигации -->
+        <div class="buttons">
+            <button id="prevBtn" onclick="prevStep()" style="display: none;">Назад</button>
+            <button id="nextBtn" onclick="nextStep()" style="display: none;">Далее</button>
+        </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
