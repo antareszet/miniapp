@@ -1,12 +1,54 @@
-// Проверка наличия Telegram WebApp API
-console.log("📦 Проверка Telegram.WebApp...");
-if (typeof Telegram === "undefined" || typeof Telegram.WebApp === "undefined") {
-    alert("❌ Telegram.WebApp API не доступен. Откройте через Telegram кнопку!");
-    console.error("❌ Telegram.WebApp не найден");
-} else {
-    console.log("✅ Telegram.WebApp найден:", Telegram.WebApp);
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+// Инициализация Telegram WebApp
+function initTelegramWebApp() {
+    console.log("⚙️ Инициализация Telegram WebApp...");
+    
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log("✅ Telegram.WebApp доступен");
+        console.log("Версия WebApp:", Telegram.WebApp.version);
+        console.log("Платформа:", Telegram.WebApp.platform);
+        console.log("InitData:", Telegram.WebApp.initData);
+        
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        Telegram.WebApp.enableClosingConfirmation();
+        Telegram.WebApp.setHeaderColor('#6a5acd');
+        
+        // Обработчики событий
+        Telegram.WebApp.onEvent('viewportChanged', function() {
+            console.log('Viewport changed:', Telegram.WebApp.viewportHeight);
+        });
+        
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            console.log('Theme changed:', Telegram.WebApp.themeParams);
+            applyTheme();
+        });
+        
+        applyTheme();
+        return true;
+    } else {
+        console.log("❌ Telegram.WebApp не доступен");
+        return false;
+    }
+}
+
+// Применяем тему Telegram
+function applyTheme() {
+    if (!Telegram.WebApp) return;
+    
+    const themeParams = Telegram.WebApp.themeParams || {};
+    document.body.style.backgroundColor = themeParams.bg_color || '#f0f4ff';
+    document.body.style.color = themeParams.text_color || '#000000';
+}
+
+// Проверяем инициализацию WebApp при загрузке и через 1 секунду
+let webAppReady = initTelegramWebApp();
+if (!webAppReady) {
+    setTimeout(() => {
+        webAppReady = initTelegramWebApp();
+        if (!webAppReady) {
+            alert("Пожалуйста, откройте это мини-приложение через Telegram бота");
+        }
+    }, 1000);
 }
 
 // Шаги регистрации
@@ -16,61 +58,53 @@ const progress = document.getElementById('progress');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
-// "Начать регистрацию"
+// Начало регистрации
 document.getElementById('startBtn').addEventListener('click', () => {
-    console.log("🟢 Нажата кнопка 'Начать регистрацию'");
+    console.log("🟢 Начало регистрации");
     document.getElementById('startScreen').style.display = 'none';
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'inline-block';
     showStep(currentStep);
 });
 
-// Отображение текущего шага
+// Навигация
+prevBtn.addEventListener('click', prevStep);
+nextBtn.addEventListener('click', nextStep);
+
+// Отображение шага
 function showStep(step) {
     document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
     const activeStep = document.getElementById(`step${step}`);
     if (!activeStep) {
-        console.warn(`⚠️ Элемент шага step${step} не найден`);
+        console.warn(`⚠️ Шаг step${step} не найден`);
         return;
     }
     activeStep.classList.add('active');
     progress.style.width = `${((step - 1) / (totalSteps - 1)) * 100}%`;
     prevBtn.style.display = (step === 1) ? 'none' : 'inline-block';
     nextBtn.textContent = (step === totalSteps) ? 'Завершить' : 'Далее';
-
+    
+    // На последнем шаге настраиваем MainButton
+    if (step === totalSteps && Telegram.WebApp && Telegram.WebApp.MainButton) {
+        setupMainButton();
+    }
+    
     console.log(`📌 Текущий шаг: ${step}`);
 }
 
-// Кнопка "Далее"
-function nextStep() {
-    console.log(`➡️ Нажата кнопка "Далее" на шаге ${currentStep}`);
-    if (validateStep(currentStep)) {
-        currentStep++;
-        if (currentStep > totalSteps) {
-            console.log("✅ Все шаги завершены. Отправляем форму...");
-            submitForm();
-            return;
-        }
-        showStep(currentStep);
-    } else {
-        console.warn("⚠️ Валидация не пройдена");
-        alert("Пожалуйста, заполните все поля!");
-    }
+// Настройка MainButton Telegram
+function setupMainButton() {
+    const mainButton = Telegram.WebApp.MainButton;
+    mainButton.setText('ЗАВЕРШИТЬ РЕГИСТРАЦИЮ');
+    mainButton.onClick(submitForm);
+    mainButton.show();
 }
 
-// Кнопка "Назад"
-function prevStep() {
-    console.log(`⬅️ Нажата кнопка 'Назад'. Текущий шаг: ${currentStep}`);
-    if (currentStep > 1) {
-        currentStep--;
-        showStep(currentStep);
-    }
-}
-
-// Проверка заполнения полей на шаге
+// Валидация шага
 function validateStep(step) {
     let valid = true;
     const inputs = document.getElementById(`step${step}`).querySelectorAll('input, select, textarea');
+    
     inputs.forEach(input => {
         if (!input.value.trim()) {
             input.classList.add('error');
@@ -78,46 +112,104 @@ function validateStep(step) {
         } else {
             input.classList.remove('error');
         }
+        
+        // Специальная проверка для возраста
+        if (input.id === 'age' && input.value) {
+            const age = parseInt(input.value);
+            if (age < 18 || age > 100) {
+                input.classList.add('error');
+                valid = false;
+            }
+        }
     });
-    console.log(`✅ Валидация шага ${step}: ${valid ? "успешно" : "есть незаполненные поля"}`);
+    
+    console.log(`✅ Валидация шага ${step}: ${valid ? "успешно" : "ошибка"}`);
     return valid;
 }
 
-// Отправка данных в Telegram бота
+// Навигация
+function nextStep() {
+    console.log(`➡️ Переход к следующему шагу с ${currentStep}`);
+    if (validateStep(currentStep)) {
+        currentStep++;
+        if (currentStep > totalSteps) {
+            submitForm();
+            return;
+        }
+        showStep(currentStep);
+    } else {
+        console.warn("⚠️ Валидация не пройдена");
+        showError("Пожалуйста, заполните все поля правильно!");
+    }
+}
+
+function prevStep() {
+    console.log(`⬅️ Возврат к предыдущему шагу с ${currentStep}`);
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+// Показ ошибки
+function showError(message) {
+    if (Telegram.WebApp && Telegram.WebApp.showAlert) {
+        Telegram.WebApp.showAlert(message);
+    } else {
+        alert(message);
+    }
+}
+
+// Отправка данных
 function submitForm() {
-    console.log("📤 Сбор данных формы...");
+    console.log("📤 Подготовка данных формы...");
+    
     const data = {
         firstName: document.getElementById('firstName').value.trim(),
         lastName: document.getElementById('lastName').value.trim(),
         gender: document.getElementById('gender').value,
         age: document.getElementById('age').value.trim(),
         sphere: document.getElementById('sphere').value.trim(),
-        interests: document.getElementById('interests').value.trim()
+        interests: document.getElementById('interests').value.trim(),
+        initData: Telegram.WebApp ? Telegram.WebApp.initData : null
     };
 
     console.log("📦 Данные для отправки:", data);
 
-    // Проверка, инициализирован ли API
-    if (!Telegram || !Telegram.WebApp) {
-        alert("❌ Telegram.WebApp API не найден. Форма должна быть открыта через Telegram.");
-        console.error("❌ Telegram.WebApp не существует");
-        return;
-    }
-
-    if (typeof Telegram.WebApp.sendData !== "function") {
-        alert("❌ Функция sendData() не найдена. Возможно, устаревшая версия Telegram.");
-        console.error("❌ sendData не является функцией.");
-        return;
-    }
-
+    // Попытка отправки разными способами
     try {
-        const payload = JSON.stringify(data);
-        Telegram.WebApp.sendData(payload);
-        Telegram.WebApp.close();
-        alert("✅ Данные отправлены! Спасибо за регистрацию.");
-        console.log("✅ Данные успешно отправлены через Telegram.WebApp.sendData()");
-    } catch (error) {
-        alert("❌ Ошибка отправки данных в Telegram.");
-        console.error("❌ sendData() вызвал исключение:", error);
+        if (window.Telegram && window.Telegram.WebApp) {
+            // Основной метод
+            if (typeof Telegram.WebApp.sendData === 'function') {
+                Telegram.WebApp.sendData(JSON.stringify(data));
+                console.log("Данные отправлены через sendData");
+            } 
+            // Альтернативный метод
+            else if (typeof Telegram.WebApp.postEvent === 'function') {
+                Telegram.WebApp.postEvent('web_app_data_send', {data: JSON.stringify(data)});
+                console.log("Данные отправлены через postEvent");
+            }
+            
+            Telegram.WebApp.close();
+            return;
+        }
+        
+        // Метод для старых версий Telegram
+        if (window.TelegramGameProxy && window.TelegramGameProxy.receiveEvent) {
+            window.TelegramGameProxy.receiveEvent('data', JSON.stringify(data));
+            console.log("Данные отправлены через TelegramGameProxy");
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.close();
+            }
+            return;
+        }
+        
+        // Если ничего не сработало
+        showError("Не удалось отправить данные. Пожалуйста, сообщите администратору.");
+        console.error("Не найдено методов отправки данных");
+        
+    } catch (e) {
+        console.error("Ошибка при отправке данных:", e);
+        showError("Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.");
     }
 }
