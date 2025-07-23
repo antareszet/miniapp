@@ -2,91 +2,151 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Поиск партнёров</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Поиск людей</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    input, select { padding: 8px; margin: 8px 0; border-radius: 6px; border: 1px solid #bbb; width: 100%; }
-    button { background: #6a5acd; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 8px; font-size: 16px; }
-    .multi-select { height: 80px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--tg-theme-bg-color, #f0f4ff);
+      color: var(--tg-theme-text-color, #000);
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+      color: var(--tg-theme-text-color, #000);
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 4px 0;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .multi-select {
+      height: 110px;
+    }
+
+    .btn {
+      background-color: var(--tg-theme-button-color, #6a5acd);
+      color: var(--tg-theme-button-text-color, #fff);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 20px 0 10px 0;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background-color: #5a4abc;
+    }
+
+    .flex {
+      display: flex;
+      gap: 8px;
+    }
+
+    .flex input {
+      width: 100%;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #666;
+      margin-top: -5px;
+    }
   </style>
 </head>
 <body>
-  <form id="searchForm">
-    <h3>Поиск по фильтрам</h3>
+  <div class="container">
+    <h2>Поиск по фильтрам</h2>
 
-    <label>Сфера:</label>
-    <select id="sphere">
-      <option value="">Любая</option>
-        <option value="">Выберите сферу</option>
+    <form id="searchForm">
+      <label>Сфера деятельности</label>
+      <select id="sphere">
+        <option value="">Любая</option>
         <option value="IT">IT и Разработка</option>
         <option value="Финансы">Финансы</option>
         <option value="Маркетинг">Маркетинг</option>
         <option value="Образование">Образование</option>
-        <option value="Продажи">Продажи</option>
         <option value="Юриспруденция">Юриспруденция</option>
-        <option value="Медицина">Медицина и здравоохранение</option>
         <option value="Дизайн">Дизайн</option>
-        <option value="Медиа">Медиа/Журналистика</option>
-        <option value="Наука">Наука/Исследования</option>
-        <option value="Инженерия">Инженерия/Производство</option>
-        <option value="Строительство">Строительство</option>
-        <option value="Логистика">Логистика/Транспорт</option>
-        <option value="HoReCa">HoReCa, туризм, гостиницы</option>
-        <option value="Ритейл">Торговля/Ритейл</option>
-        <option value="HR">Управление персоналом/HR</option>
-        <option value="Администрация">Администрирование</option>
-        <option value="Госслужба">Госслужба/НКО</option>
-        <option value="Аналитика">Аналитика/Консалтинг</option>
-        <option value="Безопасность">Безопасность/Охрана</option>
-        <option value="Культура">Искусство/Культура</option>
-        <option value="Спорт">Спорт/Фитнес</option>
-        <option value="Инфраструктура">Энергетика/Инфраструктура</option>
-        <option value="Агро">Сельское хозяйство</option>
-        <option value="Экология">Экология/Устойчивое развитие</option>
-        <option value="Блогинг">Блогинг/SMM</option>
+        <option value="Медиа">Медиа</option>
+        <option value="Наука">Наука</option>
         <option value="Другое">Другое</option>
-    </select>
+      </select>
 
-    <label>Интересы:</label>
-    <select multiple class="multi-select" id="interests">
-      <option value="Стартапы">Стартапы</option>
-      <option value="Инвестиции">Инвестиции</option>
-      <option value="Наука">Наука</option>
-      <option value="Дизайн">Дизайн</option>
-      <option value="Другое">Другое</option>
-    </select>
+      <label>Интересы</label>
+      <select multiple class="multi-select" id="interests">
+        <option value="Стартапы">Стартапы</option>
+        <option value="Инвестиции">Инвестиции</option>
+        <option value="Наука">Наука</option>
+        <option value="Дизайн">Дизайн</option>
+        <option value="Маркетинг">Маркетинг</option>
+        <option value="Путешествия">Путешествия</option>
+        <option value="Экология">Экология</option>
+        <option value="Креатив">Креатив</option>
+        <option value="Разработка">Разработка</option>
+        <option value="Нетворкинг">Нетворкинг</option>
+        <option value="Другое">Другое</option>
+      </select>
 
-    <label>Пол:</label>
-    <select id="gender">
-      <option value="">Любой</option>
-      <option value="male">Мужской</option>
-      <option value="female">Женский</option>
-    </select>
+      <label>Пол</label>
+      <select id="gender">
+        <option value="">Любой</option>
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+        <option value="other">Не указывать</option>
+      </select>
 
-    <label>Возраст (от - до):</label>
-    <div style="display:flex;gap:10px;">
-      <input type="number" id="age_from" placeholder="от" style="width: 70px;" min="18" />
-      <input type="number" id="age_to" placeholder="до" style="width: 70px;" max="100" />
-    </div>
+      <label>Возраст (от - до)</label>
+      <div class="flex">
+        <input type="number" id="age_from" placeholder="от" min="18" max="99" />
+        <input type="number" id="age_to" placeholder="до" min="18" max="99" />
+      </div>
+      <div class="note">Минимум 18 лет</div>
 
-    <button type="submit">Найти</button>
-  </form>
+      <button type="submit" class="btn">Найти</button>
+    </form>
+  </div>
 
   <script>
-    document.getElementById('searchForm').addEventListener('submit', function (e) {
+    document.getElementById("searchForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
       const data = {
-        action: "search", // 👈 отличаем от регистрации
-        sphere: document.getElementById('sphere').value,
-        interests: Array.from(document.getElementById('interests').selectedOptions).map(o => o.value),
-        gender: document.getElementById('gender').value,
-        age_from: document.getElementById('age_from').value,
-        age_to: document.getElementById('age_to').value,
+        action: "search", // 👈 для бота
+        sphere: document.getElementById("sphere").value,
+        interests: Array.from(document.getElementById("interests").selectedOptions).map(opt => opt.value),
+        gender: document.getElementById("gender").value,
+        age_from: document.getElementById("age_from").value,
+        age_to: document.getElementById("age_to").value
       };
 
-      Telegram.WebApp.sendData(JSON.stringify(data));
+      if (Telegram && Telegram.WebApp) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+      } else {
+        alert("Ошибка: Telegram WebApp не инициализирован.");
+      }
     });
   </script>
 </body>
