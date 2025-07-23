@@ -171,11 +171,24 @@
         <button type="button" class="tag-btn" data-value="Креатив">Креатив</button>
         <button type="button" class="tag-btn" data-value="Другое">Другое</button>
       </div>
+        <h3>О себе</h3>
+        <textarea id="aboutMe" placeholder="Кратко расскажите о себе и чего вы хотите от сервиса" minlength="24" required></textarea>
+        
+        <label class="checkbox">
+          <input type="checkbox" id="allowPhone">
+          Разрешаю показывать мой номер телефона при взаимном лайке
+        </label>
+        
+        <label class="checkbox">
+          <input type="checkbox" id="allowUsername" checked>
+          Разрешаю показывать мой @username при взаимном лайке
+        </label>
 
       <div class="nav-buttons">
         <button onclick="prevStep()" style="background:#888;">Назад</button>
         <button onclick="submitForm()" id="submitBtn">Завершить</button>
       </div>
+    
     </div>
 
     <!-- Статус -->
