@@ -80,26 +80,64 @@
     </div>
 
     <!-- Шаг 3 -->
-    <div class="step" id="step3">
-      <h2>Сфера и интересы</h2>
-      <select id="sphere" required>
-        <option value="">Сфера</option>
-        <option value="IT">IT</option>
-        <option value="Финансы">Финансы</option>
-        <option value="Маркетинг">Маркетинг</option>
-        <option value="Образование">Образование</option>
-        <!-- Добавь остальные по аналогии -->
-      </select>
+    <div id="step3" class="step">
+      <h2>Чем занимаетесь?</h2>
+        <select id="sphere" required>
+          <option value="">Выберите сферу</option>
+          <option value="IT">IT и Разработка</option>
+          <option value="Финансы">Финансы</option>
+          <option value="Маркетинг">Маркетинг</option>
+          <option value="Образование">Образование</option>
+          <option value="Продажи">Продажи</option>
+          <option value="Юриспруденция">Юриспруденция</option>
+          <option value="Медицина">Медицина и здравоохранение</option>
+          <option value="Дизайн">Дизайн</option>
+          <option value="Медиа">Медиа/Журналистика</option>
+          <option value="Наука">Наука/Исследования</option>
+          <option value="Инженерия">Инженерия/Производство</option>
+          <option value="Строительство">Строительство</option>
+          <option value="Логистика">Логистика/Транспорт</option>
+          <option value="HoReCa">HoReCa, туризм, гостиницы</option>
+          <option value="Ритейл">Торговля/Ритейл</option>
+          <option value="HR">Управление персоналом/HR</option>
+          <option value="Администрация">Администрирование</option>
+          <option value="Госслужба">Госслужба/НКО</option>
+          <option value="Аналитика">Аналитика/Консалтинг</option>
+          <option value="Безопасность">Безопасность/Охрана</option>
+          <option value="Культура">Искусство/Культура</option>
+          <option value="Спорт">Спорт/Фитнес</option>
+          <option value="Инфраструктура">Энергетика/Инфраструктура</option>
+          <option value="Агро">Сельское хозяйство</option>
+          <option value="Экология">Экология/Устойчивое развитие</option>
+          <option value="Блогинг">Блогинг/SMM</option>
+          <option value="Другое">Другое</option>
+        </select>
+    
       <div class="group">
-        <h4>Интересы:</h4>
-        <div id="interestsGroup">
+        <h3>Ваши интересы</h3>
+          <div class="tags-group" id="interestsGroup">
           <button type="button" class="tag-btn" data-value="Стартапы">Стартапы</button>
+          <button type="button" class="tag-btn" data-value="Инвестиции">Инвестиции</button>
+          <button type="button" class="tag-btn" data-value="Разработка">Разработка</button>
           <button type="button" class="tag-btn" data-value="Маркетинг">Маркетинг</button>
+          <button type="button" class="tag-btn" data-value="Нетворкинг">Нетворкинг</button>
           <button type="button" class="tag-btn" data-value="Наука">Наука</button>
-          <button type="button" class="tag-btn" data-value="Фитнес">Фитнес</button>
+          <button type="button" class="tag-btn" data-value="Искусство">Искусство</button>
+          <button type="button" class="tag-btn" data-value="Финансы">Финансы</button>
+          <button type="button" class="tag-btn" data-value="Лидерство">Лидерство</button>
+          <button type="button" class="tag-btn" data-value="Дизайн">Дизайн</button>
+          <button type="button" class="tag-btn" data-value="Медиа">Медиа</button>
+          <button type="button" class="tag-btn" data-value="Образование">Образование</button>
+          <button type="button" class="tag-btn" data-value="Менеджмент">Менеджмент</button>
           <button type="button" class="tag-btn" data-value="HR">HR</button>
+          <button type="button" class="tag-btn" data-value="Путешествия">Путешествия</button>
+          <button type="button" class="tag-btn" data-value="Фитнес">Фитнес</button>
+          <button type="button" class="tag-btn" data-value="Спорт">Спорт</button>
+          <button type="button" class="tag-btn" data-value="Экология">Экология</button>
+          <button type="button" class="tag-btn" data-value="Креатив">Креатив</button>
+          <button type="button" class="tag-btn" data-value="Другое">Другое</button>
           <!-- Добавь еще по желанию -->
-        </div>
+          </div>
       </div>
       <textarea id="aboutMe" placeholder="О себе" required minlength="16"></textarea>
       <label><input type="checkbox" id="allowPhone"> Разрешаю показывать номер</label><br/>
