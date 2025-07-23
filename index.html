@@ -8,60 +8,84 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: var(--tg-theme-bg-color, #f9f9fb);
-      color: var(--tg-theme-text-color, #000);
+      margin: 0;
       padding: 20px;
+      background-color: var(--tg-theme-bg-color, #f0f4ff);
+      color: var(--tg-theme-text-color, #000);
     }
-    input, select, textarea {
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    input, select {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
-      font-size: 16px;
       box-sizing: border-box;
+      font-size: 16px;
     }
     button {
-      padding: 12px;
       background-color: var(--tg-theme-button-color, #6a5acd);
       color: var(--tg-theme-button-text-color, #fff);
       border: none;
-      cursor: pointer;
+      padding: 12px 20px;
       border-radius: 8px;
+      cursor: pointer;
       font-size: 16px;
+      margin: 5px 0;
       width: 100%;
-      margin-top: 10px;
     }
-    .step { display: none; }
-    .step.active { display: block; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn {
-      from { opacity: 0; } to { opacity: 1; }
+    .error {
+      border-color: #ff4c4c;
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    #statusMessage {
+      margin-top: 15px;
+      text-align: center;
+      color: #6a5acd;
+      display: none;
+    }
+    .tags-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
     }
     .tag-btn {
       padding: 9px 18px;
       border-radius: 20px;
-      border: 1.5px solid var(--tg-theme-link-color, #6a5acd);
-      background: var(--tg-theme-secondary-bg-color, #edeaff);
-      color: var(--tg-theme-text-color, #4a4a8e);
+      border: 1.5px solid #6a5acd;
+      background: #edeaff;
+      color: #4a4a8e;
       cursor: pointer;
       font-size: 15px;
-      transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.15s;
+      transition: background .18s, color .18s, border-color .18s;
+      outline: none;
       margin: 2px 0;
-      box-shadow: 0 2px 6px rgba(40,40,60,0.08);
     }
     .tag-btn.selected {
-      background: var(--tg-theme-button-color, #6a5acd);
-      color: var(--tg-theme-button-text-color, #fff);
-      border-color: var(--tg-theme-link-color, #fff176);
-      box-shadow: 0 3px 18px rgba(100,100,200,0.12);
+      background: #6a5acd;
+      color: #fff;
+      border-color: #483d8b;
     }
-    .tag-btn:hover, .tag-btn:focus-visible {
-      filter: brightness(1.08);
-      outline: none;
-    }
-
-    .group { margin-top: 10px; }
-    #previewList p { margin: 8px 0; }
   </style>
 </head>
 <body>
