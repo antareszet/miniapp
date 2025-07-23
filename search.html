@@ -3,113 +3,189 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Поиск людей</title>
+  <title>Поиск</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: var(--tg-theme-bg-color, #fff);
-      color: var(--tg-theme-text-color, #000);
       margin: 0;
       padding: 20px;
+      background-color: var(--tg-theme-bg-color, #f0f4ff);
+      color: var(--tg-theme-text-color, #000);
     }
-    h2 { margin-bottom: 10px; }
-    select, input {
+    select, input, textarea {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
       font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #aaa;
       box-sizing: border-box;
     }
+    button {
+      background-color: var(--tg-theme-button-color, #6a5acd);
+      color: var(--tg-theme-button-text-color, #fff);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+    }
+    .tags-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
     .tag-btn {
-      display: inline-block;
-      padding: 8px 16px;
-      margin: 4px;
+      padding: 9px 18px;
       border-radius: 20px;
       border: 1.5px solid #6a5acd;
-      background: #f0f0ff;
-      color: #444;
+      background: #edeaff;
+      color: #4a4a8e;
       cursor: pointer;
+      font-size: 15px;
+      transition: background .18s, color .18s, border-color .18s;
+      outline: none;
+      margin: 2px 0;
     }
     .tag-btn.selected {
       background: #6a5acd;
       color: #fff;
       border-color: #483d8b;
     }
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background: var(--tg-theme-button-color, #6a5acd);
-      color: var(--tg-theme-button-text-color, #fff);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
+    .error {
+      border-color: #ff4c4c;
+      background-color: #fff0f0;
     }
-    .results { margin-top: 20px; }
-    .card {
-      background: #f4f4fa;
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-    }
-    .card h3 {
-      margin: 0 0 6px;
-    }
-    .card .interests {
+    .note {
       font-size: 14px;
-      color: #333;
-    }
-    .card .btn {
-      margin-top: 8px;
+      color: #666;
+      margin-top: -5px;
     }
   </style>
 </head>
 <body>
-  <h2>Поиск</h2>
-  <div>
+  <div class="container">
+    <h2>Поиск по фильтрам</h2>
     <form id="searchForm">
+
+      <label for="sphere">Сфера деятельности</label>
       <select id="sphere">
-        <option value="">Сфера: любая</option>
-        <option value="IT">IT</option>
+        <option value="">Любая</option>
+        <option value="IT">IT и Разработка</option>
         <option value="Финансы">Финансы</option>
         <option value="Маркетинг">Маркетинг</option>
         <option value="Образование">Образование</option>
+        <option value="Продажи">Продажи</option>
+        <option value="Юриспруденция">Юриспруденция</option>
+        <option value="Медицина">Медицина и здравоохранение</option>
+        <option value="Дизайн">Дизайн</option>
+        <option value="Медиа">Медиа/Журналистика</option>
+        <option value="Наука">Наука/Исследования</option>
+        <option value="Инженерия">Инженерия/Производство</option>
+        <option value="Строительство">Строительство</option>
+        <option value="Логистика">Логистика/Транспорт</option>
+        <option value="HoReCa">HoReCa, туризм, гостиницы</option>
+        <option value="Ритейл">Торговля/Ритейл</option>
+        <option value="HR">Управление персоналом/HR</option>
+        <option value="Администрация">Администрирование</option>
+        <option value="Госслужба">Госслужба/НКО</option>
+        <option value="Аналитика">Аналитика/Консалтинг</option>
+        <option value="Безопасность">Безопасность/Охрана</option>
+        <option value="Культура">Искусство/Культура</option>
+        <option value="Спорт">Спорт/Фитнес</option>
+        <option value="Инфраструктура">Энергетика/Инфраструктура</option>
+        <option value="Агро">Сельское хозяйство</option>
+        <option value="Экология">Экология/Устойчивое развитие</option>
+        <option value="Блогинг">Блогинг/SMM</option>
+        <option value="Другое">Другое</option>
       </select>
 
+      <label>Интересы</label>
+      <div class="tags-group" id="interestsGroup">
+        <button type="button" class="tag-btn" data-value="Стартапы">Стартапы</button>
+        <button type="button" class="tag-btn" data-value="Инвестиции">Инвестиции</button>
+        <button type="button" class="tag-btn" data-value="Разработка">Разработка</button>
+        <button type="button" class="tag-btn" data-value="Маркетинг">Маркетинг</button>
+        <button type="button" class="tag-btn" data-value="Нетворкинг">Нетворкинг</button>
+        <button type="button" class="tag-btn" data-value="Наука">Наука</button>
+        <button type="button" class="tag-btn" data-value="Искусство">Искусство</button>
+        <button type="button" class="tag-btn" data-value="Финансы">Финансы</button>
+        <button type="button" class="tag-btn" data-value="Лидерство">Лидерство</button>
+        <button type="button" class="tag-btn" data-value="Дизайн">Дизайн</button>
+        <button type="button" class="tag-btn" data-value="Медиа">Медиа</button>
+        <button type="button" class="tag-btn" data-value="Образование">Образование</button>
+        <button type="button" class="tag-btn" data-value="Менеджмент">Менеджмент</button>
+        <button type="button" class="tag-btn" data-value="HR">HR</button>
+        <button type="button" class="tag-btn" data-value="Путешествия">Путешествия</button>
+        <button type="button" class="tag-btn" data-value="Фитнес">Фитнес</button>
+        <button type="button" class="tag-btn" data-value="Спорт">Спорт</button>
+        <button type="button" class="tag-btn" data-value="Экология">Экология</button>
+        <button type="button" class="tag-btn" data-value="Креатив">Креатив</button>
+        <button type="button" class="tag-btn" data-value="Другое">Другое</button>
+      </div>
+
+      <label for="gender">Пол</label>
       <select id="gender">
-        <option value="">Пол: любой</option>
+        <option value="">Любой</option>
         <option value="male">Мужской</option>
         <option value="female">Женский</option>
-        <option value="other">Другое</option>
+        <option value="other">Предпочитаю не указывать</option>
       </select>
 
-      <div style="display:flex;gap:8px;">
-        <input type="number" placeholder="Возраст от" id="age_from" min="18" max="100"/>
-        <input type="number" placeholder="до" id="age_to" min="18" max="100"/>
+      <label for="age_from">Возраст (от - до)</label>
+      <div style="display: flex; gap: 10px;">
+        <input type="number" id="age_from" placeholder="от" min="18" max="100" />
+        <input type="number" id="age_to" placeholder="до" min="18" max="100" />
       </div>
-
-      <div>
-        <p>Интересы:</p>
-        <div id="interestsGroup">
-          <span class="tag-btn" data-value="Стартапы">Стартапы</span>
-          <span class="tag-btn" data-value="Маркетинг">Маркетинг</span>
-          <span class="tag-btn" data-value="Наука">Наука</span>
-          <span class="tag-btn" data-value="Фитнес">Фитнес</span>
-          <span class="tag-btn" data-value="HR">HR</span>
-        </div>
-      </div>
+      <div class="note">Минимальный возраст — 18 лет</div>
 
       <button type="submit">🔍 Найти</button>
     </form>
-
-    <div class="results" id="results"> </div>
   </div>
 
-  <script src="search.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      Telegram?.WebApp?.ready();
+      Telegram?.WebApp?.expand();
+
+      // Выбор интересов
+      document.querySelectorAll('.tag-btn').forEach(btn =>
+        btn.addEventListener('click', () => btn.classList.toggle('selected'))
+      );
+
+      document.getElementById('searchForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const ageFrom = parseInt(document.getElementById('age_from').value) || null;
+        const ageTo = parseInt(document.getElementById('age_to').value) || null;
+
+        if (ageFrom && ageTo && ageFrom > ageTo) {
+          alert("🚫 Возраст \"от\" должен быть меньше или равен \"до\".");
+          return;
+        }
+
+        const interests = Array.from(document.querySelectorAll('.tag-btn.selected')).map(btn => btn.dataset.value);
+
+        const data = {
+          action: "search",
+          sphere: document.getElementById('sphere').value || "",
+          gender: document.getElementById('gender').value || "",
+          age_from: ageFrom,
+          age_to: ageTo,
+          interests: interests
+        };
+
+        if (Telegram && Telegram.WebApp) {
+          Telegram.WebApp.sendData(JSON.stringify(data));
+        } else {
+          alert("Ошибка: Telegram WebApp не инициализирован.");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
