@@ -8,198 +8,108 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: var(--tg-theme-bg-color, #fff);
+      color: var(--tg-theme-text-color, #000);
       margin: 0;
       padding: 20px;
-      background-color: var(--tg-theme-bg-color, #f0f4ff);
-      color: var(--tg-theme-text-color, #000);
     }
-    .container {
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    h2 {
-      margin-bottom: 18px;
-      color: var(--tg-theme-text-color, #000);
-    }
-    label {
-      display: block;
-      margin: 12px 0 4px 0;
-      font-weight: bold;
-    }
-    input, select {
+    h2 { margin-bottom: 10px; }
+    select, input {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
+      padding: 10px;
       margin-bottom: 10px;
-    }
-    button {
-      background-color: var(--tg-theme-button-color, #6a5acd);
-      color: var(--tg-theme-button-text-color, #fff);
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
       font-size: 16px;
-      margin: 12px 0;
-      width: 100%;
-    }
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    .tags-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 12px 0;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
     }
     .tag-btn {
-      padding: 9px 18px;
+      display: inline-block;
+      padding: 8px 16px;
+      margin: 4px;
       border-radius: 20px;
       border: 1.5px solid #6a5acd;
-      background: #edeaff;
-      color: #4a4a8e;
+      background: #f0f0ff;
+      color: #444;
       cursor: pointer;
-      font-size: 15px;
-      transition: background .18s, color .18s, border-color .18s;
-      outline: none;
-      margin: 2px 0;
     }
     .tag-btn.selected {
       background: #6a5acd;
       color: #fff;
       border-color: #483d8b;
     }
-    .flex {
-      display: flex;
-      gap: 8px;
-    }
-    .flex input {
+    button {
       width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: var(--tg-theme-button-color, #6a5acd);
+      color: var(--tg-theme-button-text-color, #fff);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
     }
-    .note {
+    .results { margin-top: 20px; }
+    .card {
+      background: #f4f4fa;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 0 0 6px;
+    }
+    .card .interests {
       font-size: 14px;
-      color: #666;
-      margin-top: -5px;
+      color: #333;
+    }
+    .card .btn {
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Поиск по фильтрам</h2>
+  <h2>Поиск</h2>
+  <div>
     <form id="searchForm">
-
-      <label>Сфера деятельности</label>
       <select id="sphere">
-        <option value="">Любая</option>
-        <option value="IT">IT и Разработка</option>
+        <option value="">Сфера: любая</option>
+        <option value="IT">IT</option>
         <option value="Финансы">Финансы</option>
         <option value="Маркетинг">Маркетинг</option>
         <option value="Образование">Образование</option>
-        <option value="Продажи">Продажи</option>
-        <option value="Юриспруденция">Юриспруденция</option>
-        <option value="Медицина">Медицина и здравоохранение</option>
-        <option value="Дизайн">Дизайн</option>
-        <option value="Медиа">Медиа/Журналистика</option>
-        <option value="Наука">Наука/Исследования</option>
-        <option value="Инженерия">Инженерия/Производство</option>
-        <option value="Строительство">Строительство</option>
-        <option value="Логистика">Логистика/Транспорт</option>
-        <option value="HoReCa">HoReCa, туризм, гостиницы</option>
-        <option value="Ритейл">Торговля/Ритейл</option>
-        <option value="HR">Управление персоналом/HR</option>
-        <option value="Администрация">Администрирование</option>
-        <option value="Госслужба">Госслужба/НКО</option>
-        <option value="Аналитика">Аналитика/Консалтинг</option>
-        <option value="Безопасность">Безопасность/Охрана</option>
-        <option value="Культура">Искусство/Культура</option>
-        <option value="Спорт">Спорт/Фитнес</option>
-        <option value="Инфраструктура">Энергетика/Инфраструктура</option>
-        <option value="Агро">Сельское хозяйство</option>
-        <option value="Экология">Экология/Устойчивое развитие</option>
-        <option value="Блогинг">Блогинг/SMM</option>
-        <option value="Другое">Другое</option>
       </select>
 
-      <label>Интересы</label>
-      <div class="tags-group" id="interestsGroup">
-        <button type="button" class="tag-btn" data-value="Стартапы">Стартапы</button>
-        <button type="button" class="tag-btn" data-value="Инвестиции">Инвестиции</button>
-        <button type="button" class="tag-btn" data-value="Разработка">Разработка</button>
-        <button type="button" class="tag-btn" data-value="Маркетинг">Маркетинг</button>
-        <button type="button" class="tag-btn" data-value="Нетворкинг">Нетворкинг</button>
-        <button type="button" class="tag-btn" data-value="Наука">Наука</button>
-        <button type="button" class="tag-btn" data-value="Искусство">Искусство</button>
-        <button type="button" class="tag-btn" data-value="Финансы">Финансы</button>
-        <button type="button" class="tag-btn" data-value="Лидерство">Лидерство</button>
-        <button type="button" class="tag-btn" data-value="Дизайн">Дизайн</button>
-        <button type="button" class="tag-btn" data-value="Медиа">Медиа</button>
-        <button type="button" class="tag-btn" data-value="Образование">Образование</button>
-        <button type="button" class="tag-btn" data-value="Менеджмент">Менеджмент</button>
-        <button type="button" class="tag-btn" data-value="HR">HR</button>
-        <button type="button" class="tag-btn" data-value="Путешествия">Путешествия</button>
-        <button type="button" class="tag-btn" data-value="Фитнес">Фитнес</button>
-        <button type="button" class="tag-btn" data-value="Спорт">Спорт</button>
-        <button type="button" class="tag-btn" data-value="Экология">Экология</button>
-        <button type="button" class="tag-btn" data-value="Креатив">Креатив</button>
-        <button type="button" class="tag-btn" data-value="Другое">Другое</button>
-      </div>
-
-      <label>Пол</label>
       <select id="gender">
-        <option value="">Любой</option>
+        <option value="">Пол: любой</option>
         <option value="male">Мужской</option>
         <option value="female">Женский</option>
-        <option value="other">Предпочитаю не указывать</option>
+        <option value="other">Другое</option>
       </select>
 
-      <label>Возраст (от - до)</label>
-      <div class="flex">
-        <input type="number" id="age_from" min="18" max="99" placeholder="от" />
-        <input type="number" id="age_to" min="18" max="99" placeholder="до" />
+      <div style="display:flex;gap:8px;">
+        <input type="number" placeholder="Возраст от" id="age_from" min="18" max="100"/>
+        <input type="number" placeholder="до" id="age_to" min="18" max="100"/>
       </div>
-      <div class="note">Минимум 18 лет</div>
 
-      <button type="submit">Найти</button>
+      <div>
+        <p>Интересы:</p>
+        <div id="interestsGroup">
+          <span class="tag-btn" data-value="Стартапы">Стартапы</span>
+          <span class="tag-btn" data-value="Маркетинг">Маркетинг</span>
+          <span class="tag-btn" data-value="Наука">Наука</span>
+          <span class="tag-btn" data-value="Фитнес">Фитнес</span>
+          <span class="tag-btn" data-value="HR">HR</span>
+        </div>
+      </div>
+
+      <button type="submit">🔍 Найти</button>
     </form>
+
+    <div class="results" id="results"> </div>
   </div>
 
-  <script>
-    // Логика выбора интересов (множественный выбор через tag-кнопки)
-    function getSelectedInterests() {
-      return Array.from(document.querySelectorAll('.tag-btn.selected')).map(btn => btn.dataset.value);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.tag-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          this.classList.toggle('selected');
-        });
-      });
-
-      document.getElementById("searchForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const data = {
-          action: "search",
-          sphere: document.getElementById("sphere").value,
-          interests: getSelectedInterests(),
-          gender: document.getElementById("gender").value,
-          age_from: document.getElementById("age_from").value,
-          age_to: document.getElementById("age_to").value
-        };
-
-        if (Telegram && Telegram.WebApp) {
-          Telegram.WebApp.sendData(JSON.stringify(data));
-        } else {
-          alert("Ошибка: Telegram WebApp не инициализирован.");
-        }
-      });
-    });
-  </script>
+  <script src="search.js"></script>
 </body>
 </html>
