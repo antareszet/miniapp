@@ -1,16 +1,25 @@
 let currentStep = 1;
+let tg = window.Telegram?.WebApp;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const tg = window.Telegram?.WebApp;
+document.addEventListener("DOMContentLoaded", () => {
   tg?.ready();
   tg?.expand();
 
-  // Интерактивный выбор тегов интересов
-  document.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      this.classList.toggle('selected');
-    });
-  });
+  // Метка режима
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get("mode");
+  const toUserId = urlParams.get("to");
+
+  // Если WebApp открыт в режиме лайка
+  if (mode === "like" && toUserId) {
+    sendLike(toUserId);
+    return;
+  }
+
+  // обработка тегов
+  document.querySelectorAll(".tag-btn").forEach(btn =>
+    btn.addEventListener("click", () => btn.classList.toggle("selected"))
+  );
 
   showStep(currentStep);
 });
@@ -18,75 +27,93 @@ document.addEventListener('DOMContentLoaded', () => {
 function nextStep() {
   if (validateStep(currentStep)) {
     currentStep++;
+    if (currentStep === 4) preparePreview();
     showStep(currentStep);
   }
 }
-
 function prevStep() {
-  if (currentStep > 1) {
-    currentStep--;
-    showStep(currentStep);
-  }
+  if (currentStep > 1) currentStep--;
+  showStep(currentStep);
 }
-
 function showStep(step) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById(`step${step}`).classList.add('active');
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+  document.getElementById(`step${step}`).classList.add("active");
 }
 
 function validateStep(step) {
-  const stepEl = document.getElementById(`step${step}`);
-  const required = stepEl.querySelectorAll('[required]');
-  let valid = true;
-
-  required.forEach(input => {
-    const value = input.value.trim();
-
-    // Проверка обычного заполнения
-    if (!value || (input.minLength && value.length < input.minLength)) {
-      input.classList.add('error');
-      valid = false;
+  const el = document.getElementById(`step${step}`);
+  const required = el.querySelectorAll("[required]");
+  let ok = true;
+  required.forEach(inp => {
+    if (!inp.value.trim() || (inp.minLength && inp.value.length < inp.minLength)) {
+      inp.classList.add("error");
+      ok = false;
     } else {
-      input.classList.remove('error');
+      inp.classList.remove("error");
     }
 
-    // Возрастное ограничение
-    if (input.id === "age") {
-      const age = parseInt(value, 10);
-      if (isNaN(age) || age < 18 || age > 100) {
-        input.classList.add('error');
-        valid = false;
+    if (inp.id === "age") {
+      const val = parseInt(inp.value, 10);
+      if (val < 18 || val > 100 || isNaN(val)) {
+        inp.classList.add("error");
+        ok = false;
       }
     }
   });
-
-  return valid;
+  return ok;
 }
 
 function getSelectedInterests() {
-  return Array.from(document.querySelectorAll('.tag-btn.selected')).map(btn => btn.dataset.value);
+  return Array.from(document.querySelectorAll(".tag-btn.selected")).map(b => b.dataset.value);
+}
+
+function preparePreview() {
+  const data = collectData();
+  const preview = document.getElementById("previewList");
+  preview.innerHTML = `
+    <p><b>Имя:</b> ${data.firstName} ${data.lastName}</p>
+    <p><b>Пол:</b> ${data.gender}</p>
+    <p><b>Возраст:</b> ${data.age}</p>
+    <p><b>Сфера:</b> ${data.sphere}</p>
+    <p><b>Интересы:</b> ${data.interests.join(", ")}</p>
+    <p><b>О себе:</b> ${data.aboutMe}</p>
+    <p><b>Показывать номер:</b> ${data.allowPhone ? "Да" : "Нет"}</p>
+    <p><b>Показывать username:</b> ${data.allowUsername ? "Да" : "Нет"}</p>
+  `;
+}
+
+function collectData() {
+  return {
+    action: "register",
+    firstName: document.getElementById("firstName").value.trim(),
+    lastName: document.getElementById("lastName").value.trim(),
+    gender: document.getElementById("gender").value,
+    age: parseInt(document.getElementById("age").value.trim(), 10),
+    sphere: document.getElementById("sphere").value,
+    interests: getSelectedInterests(),
+    aboutMe: document.getElementById("aboutMe").value.trim(),
+    allowPhone: document.getElementById("allowPhone").checked,
+    allowUsername: document.getElementById("allowUsername").checked
+  };
 }
 
 function submitForm() {
-  if (!validateStep(currentStep)) return;
-
-  const data = {
-    action: "register",  // Важно для обработки на сервере
-    firstName: document.getElementById('firstName').value.trim(),
-    lastName: document.getElementById('lastName').value.trim(),
-    gender: document.getElementById('gender').value,
-    age: parseInt(document.getElementById('age').value.trim(), 10),
-    sphere: document.getElementById('sphere').value,
-    interests: getSelectedInterests(),
-    aboutMe: document.getElementById('aboutMe')?.value.trim() || '',
-    allowPhone: document.getElementById('allowPhone')?.checked || false,
-    allowUsername: document.getElementById('allowUsername')?.checked !== false
-  };
-
-  // Отправка объекта в Telegram WebApp API
-  if (Telegram && Telegram.WebApp) {
-    Telegram.WebApp.sendData(JSON.stringify(data));
+  const data = collectData();
+  if (tg && tg.sendData) {
+    tg.sendData(JSON.stringify(data));
   } else {
-    alert("Ошибка Telegram WebApp");
+    alert("Ошибка WebApp API.");
+  }
+}
+
+function sendLike(toUserId) {
+  const payload = {
+    action: "like",
+    to_user_id: parseInt(toUserId, 10)
+  };
+  if (tg && tg.sendData) {
+    tg.sendData(JSON.stringify(payload));
+  } else {
+    alert("Ошибка Telegram API");
   }
 }
